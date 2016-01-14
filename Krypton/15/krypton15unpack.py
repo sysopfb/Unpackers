@@ -24,7 +24,7 @@ def LZNT_decompress(buffer, pos):
     return uncompressed_buffer
 
 exe = open(sys.argv[1],'rb').read()
-exe = exe[1024:]
+exe = exe[512:]
 
 start = exe.index('\x00\x00\x40\x00'+'\x00'*8)-5
 

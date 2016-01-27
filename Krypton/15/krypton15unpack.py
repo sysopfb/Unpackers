@@ -24,12 +24,20 @@ def LZNT_decompress(buffer, pos):
     return uncompressed_buffer
 
 exe = open(sys.argv[1],'rb').read()
+#Can do 612 here and take out the if else chain and while loop below which works most of the time
 exe = exe[512:]
 
-start = exe.index('\x00\x00\x40\x00'+'\x00'*8)-5
+while exe != []:
+	start = exe.index('\x00\x00\x40\x00'+'\x00'*8)-5
 
-(unk,xorkey2,unk,unk,unk,unk,unk,xorkey1,) = struct.unpack_from('<IBIIIIIB', exe[start:])
-
+	(unk,xorkey2,unk,unk,unk,unk,unk,xorkey1,) = struct.unpack_from('<IBIIIIIB', exe[start:])
+	if xorkey2 != 0 and xorkey1 != 0:
+		break
+	elif len(exe) > 100:
+		exe = exe[100:]
+	else:
+		print("Couldn't find the payload")
+		sys.exit(-1)
 blob = bytearray(exe[start+39:])
 for i in range(len(blob)):
 	blob[i] ^= xorkey1
